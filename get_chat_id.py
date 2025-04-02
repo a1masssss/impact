@@ -1,18 +1,21 @@
 import asyncio
+import os
 from aiogram import Bot, Dispatcher, types
 from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
 from aiogram.types import Message
 from aiogram import Router
+from dotenv import load_dotenv
 
-API_TOKEN = "7487382135:AAG1Jd7HiHEPlUXYYKbAsW6woCRJPF855sg"
+# Загружаем переменные из .env
+load_dotenv()
+API_TOKEN = os.getenv("API_TOKEN")
 
 bot = Bot(
     token=API_TOKEN,
     default=DefaultBotProperties(parse_mode=ParseMode.HTML)
 )
 
-# Используем router, чтобы его включить в Dispatcher
 router = Router()
 
 @router.message()
@@ -23,7 +26,7 @@ async def get_chat_id(message: Message):
 dp = Dispatcher()
 
 async def main():
-    dp.include_router(router)  
+    dp.include_router(router)
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
